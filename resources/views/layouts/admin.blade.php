@@ -42,12 +42,20 @@
             </a>
         </nav>
 
-        {{-- Bottom Public Link --}}
-        <div class="p-4 border-t border-neutral-800">
+        {{-- Bottom Public Link & Logout --}}
+        <div class="p-4 border-t border-neutral-800 space-y-2">
             <a href="{{ route('home') }}" target="_blank" class="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-neutral-400 hover:text-white hover:bg-neutral-800 transition">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                 Buka Laman Awam
             </a>
+
+            <form action="{{ route('admin.logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-rose-400 hover:text-rose-200 hover:bg-rose-950/40 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                    Log Keluar
+                </button>
+            </form>
         </div>
     </aside>
 
@@ -58,11 +66,18 @@
             <div class="flex items-center gap-3">
                 <span class="text-sm font-bold text-neutral-900">@yield('page_title', 'Papan Pemuka')</span>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-4">
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    Staf Klinik Aktif
+                    {{ auth()->user()->name ?? 'Pentadbir Klinik' }}
                 </span>
+
+                <form action="{{ route('admin.logout') }}" method="POST" class="md:hidden">
+                    @csrf
+                    <button type="submit" class="p-2 rounded-lg text-rose-600 hover:bg-rose-50 text-xs font-bold">
+                        Log Keluar
+                    </button>
+                </form>
             </div>
         </header>
 
@@ -81,4 +96,3 @@
 
 </body>
 </html>
-

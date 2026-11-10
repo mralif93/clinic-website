@@ -6,7 +6,9 @@ use App\Models\Appointment;
 use App\Models\Practitioner;
 use App\Models\ScreenerResponse;
 use App\Models\Service;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,7 +17,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Seed Practitioners
+        // 0. Seed Default Admin User
+        User::updateOrCreate(
+            ['email' => 'admin@sakeenahmedicare.net'],
+            [
+                'name' => 'Pentadbir Sakeenah',
+                'password' => Hash::make('password123'),
+                'email_verified_at' => now(),
+            ]
+        );
         $practitioners = [
             [
                 'name' => 'CP Tasha',

@@ -5,16 +5,51 @@ namespace Tests\Feature;
 use App\Models\Appointment;
 use App\Models\ScreenerResponse;
 use App\Models\Service;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class AdminPortalTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_admin_can_view_dashboard(): void
+    private User $admin;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->admin = User::factory()->create([
+            'email' => 'admin@sakeenahmedicare.net',
+            'password' => Hash::make('password123'),
+        ]);
+    }
+
+    public function test_unauthenticated_user_cannot_access_admin_dashboard(): void
     {
         $response = $this->get(route('admin.dashboard'));
+        $response->assertRedirect(route('admin.login'));
+    }
+
+    public function test_admin_can_view_login_page_and_authenticate(): void
+    {
+        $viewResponse = $this->get(route('admin.login'));
+        $viewResponse->assertStatus(200);
+        $viewResponse->assertSee('Portal Pentadbiran Klinik');
+
+        $loginResponse = $this->post(route('admin.login.submit'), [
+            'email' => 'admin@sakeenahmedicare.net',
+            'password' => 'password123',
+        ]);
+
+        $loginResponse->assertRedirect(route('admin.dashboard'));
+        $this->assertAuthenticatedAs($this->admin);
+    }
+
+    public function test_admin_can_view_dashboard_when_authenticated(): void
+    {
+        $response = $this->actingAs($this->admin)->get(route('admin.dashboard'));
 
         $response->assertStatus(200);
         $response->assertSee('Papan Pemuka Pentadbiran Klinik');
@@ -29,15 +64,15 @@ class AdminPortalTest extends TestCase
             'payment_status' => 'pending',
         ]);
 
-        $listResponse = $this->get(route('admin.appointments.index'));
+        $listResponse = $this->actingAs($this->admin)->get(route('admin.appointments.index'));
         $listResponse->assertStatus(200);
         $listResponse->assertSee($appointment->booking_code);
 
-        $showResponse = $this->get(route('admin.appointments.show', $appointment->id));
+        $showResponse = $this->actingAs($this->admin)->get(route('admin.appointments.show', $appointment->id));
         $showResponse->assertStatus(200);
         $showResponse->assertSee($appointment->client_name);
 
-        $updateResponse = $this->patch(route('admin.appointments.update-status', $appointment->id), [
+        $updateResponse = $this->actingAs($this->admin)->patch(route('admin.appointments.update-status', $appointment->id), [
             'status' => 'confirmed',
             'payment_status' => 'paid',
             'admin_notes' => 'Deposit disahkan masuk melalui akaun Maybank.',
@@ -67,13 +102,21 @@ class AdminPortalTest extends TestCase
             'answers' => [1 => 2, 2 => 1],
         ]);
 
-        $listResponse = $this->get(route('admin.screeners.index'));
+        $listResponse = $this->actingAs($this->admin)->get(route('admin.screeners.index'));
         $listResponse->assertStatus(200);
         $listResponse->assertSee('Pesakit Ujian');
 
-        $showResponse = $this->get(route('admin.screeners.show', $screener->id));
+        $showResponse = $this->actingAs($this->admin)->get(route('admin.screeners.show', $screener->id));
         $showResponse->assertStatus(200);
         $showResponse->assertSee('Pesakit Ujian');
         $showResponse->assertSee('Pecahan Jawapan Klien');
+    }
+
+    public function test_admin_can_logout(): void
+    {
+        $response = $this->actingAs($this->admin)->post(route('admin.logout'));
+
+        $response->assertRedirect(route('admin.login'));
+        $this->assertGuest();
     }
 }

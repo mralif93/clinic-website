@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminAppointmentController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminScreenerController;
+use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HomeController;
@@ -47,14 +48,26 @@ Route::get('/tempahan-berjaya/{booking_code}', [BookingController::class, 'confi
 // PORTAL PENGURUSAN KLINIK (ADMIN PORTAL)
 // ==========================================
 Route::prefix('admin')->name('admin.')->group(function (): void {
-    Route::get('/', AdminDashboardController::class)->name('dashboard');
+    // Auth Routes
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // Pengurusan Tempahan
-    Route::get('/tempahan', [AdminAppointmentController::class, 'index'])->name('appointments.index');
-    Route::get('/tempahan/{id}', [AdminAppointmentController::class, 'show'])->name('appointments.show');
-    Route::patch('/tempahan/{id}/status', [AdminAppointmentController::class, 'updateStatus'])->name('appointments.update-status');
+    // Forgot Password
+    Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
+    Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
 
-    // Pengurusan Ujian Saringan
-    Route::get('/ujian-saringan', [AdminScreenerController::class, 'index'])->name('screeners.index');
-    Route::get('/ujian-saringan/{id}', [AdminScreenerController::class, 'show'])->name('screeners.show');
+    // Protected Admin Routes
+    Route::middleware('auth')->group(function (): void {
+        Route::get('/', AdminDashboardController::class)->name('dashboard');
+
+        // Pengurusan Tempahan
+        Route::get('/tempahan', [AdminAppointmentController::class, 'index'])->name('appointments.index');
+        Route::get('/tempahan/{id}', [AdminAppointmentController::class, 'show'])->name('appointments.show');
+        Route::patch('/tempahan/{id}/status', [AdminAppointmentController::class, 'updateStatus'])->name('appointments.update-status');
+
+        // Pengurusan Ujian Saringan
+        Route::get('/ujian-saringan', [AdminScreenerController::class, 'index'])->name('screeners.index');
+        Route::get('/ujian-saringan/{id}', [AdminScreenerController::class, 'show'])->name('screeners.show');
+    });
 });
