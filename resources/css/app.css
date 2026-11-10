@@ -1,0 +1,18 @@
+@import 'tailwindcss';
+
+@source '../../resources/views/**/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    
+    --color-brand-primary: #2D6A4F;
+    --color-brand-primary-hover: #1E4634;
+    --color-brand-light: #52B788;
+    --color-brand-teal: #2A6F97;
+    --color-brand-accent: #E07A5F;
+    --color-brand-accent-hover: #CC654A;
+    --color-brand-surface: #FBFBFB;
+    --color-brand-card: #F4F1EA;
+}
