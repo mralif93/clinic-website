@@ -9,12 +9,12 @@
     {{-- Header & Create Action --}}
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h2 class="text-xl font-bold text-neutral-900">Senarai Artikel & Blog</h2>
-            <p class="text-xs text-neutral-500">Urus dan terbitkan kandungan kesedaran psikologi, hubungan, dan panduan terapi.</p>
+            <h2 class="text-xl font-extrabold text-neutral-900 tracking-tight">Senarai Artikel & Blog</h2>
+            <p class="text-xs text-neutral-500 mt-0.5">Urus dan terbitkan kandungan kesedaran psikologi, hubungan, dan panduan terapi.</p>
         </div>
 
         <div class="flex items-center gap-3">
-            <a href="{{ route('admin.articles.create') }}" class="px-5 py-2.5 rounded-full text-xs font-bold text-white bg-[#2D6A4F] hover:bg-[#1E4634] shadow-sm transition flex items-center gap-1.5">
+            <a href="{{ route('admin.articles.create') }}" class="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-[#2D6A4F] hover:bg-[#1E4634] shadow-xs transition flex items-center gap-1.5">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                 <span>Tulis Post Baharu</span>
             </a>
@@ -22,23 +22,23 @@
     </div>
 
     {{-- Filter & Search Bar --}}
-    <div class="bg-white p-4 rounded-2xl border border-neutral-200/90 shadow-2xs flex items-center justify-between">
+    <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-neutral-200/90 shadow-2xs flex items-center justify-between">
         <form method="GET" action="{{ route('admin.articles.index') }}" class="flex items-center gap-2 w-full max-w-md">
             <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari tajuk artikel atau nama penulis..." class="w-full py-2 px-3.5 rounded-xl border border-neutral-300 text-xs bg-[#FBFBFB] focus:bg-white focus:ring-2 focus:ring-[#2D6A4F]/20 focus:border-[#2D6A4F]">
             <button type="submit" class="px-4 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-xs font-bold text-neutral-700 transition">
                 Cari
             </button>
             @if(request('q'))
-                <a href="{{ route('admin.articles.index') }}" class="text-xs text-rose-600 hover:underline">Reset</a>
+                <a href="{{ route('admin.articles.index') }}" class="text-xs text-rose-600 hover:underline whitespace-nowrap">Reset</a>
             @endif
         </form>
     </div>
 
     {{-- Table of Articles --}}
-    <div class="bg-white rounded-3xl border border-neutral-200/90 shadow-2xs overflow-hidden">
+    <div class="bg-white rounded-2xl border border-neutral-200/90 shadow-2xs overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left text-xs text-neutral-600">
-                <thead class="bg-neutral-50 text-[11px] uppercase tracking-wider font-bold text-neutral-500 border-b border-neutral-200/80">
+                <thead class="bg-neutral-50/90 text-[10px] uppercase tracking-wider font-bold text-neutral-500 border-b border-neutral-200">
                     <tr>
                         <th class="py-3.5 px-4">Artikel</th>
                         <th class="py-3.5 px-4">Kategori</th>
@@ -54,21 +54,21 @@
                         <tr class="hover:bg-neutral-50/70 transition">
                             <td class="py-3.5 px-4 max-w-xs">
                                 <div class="flex items-center gap-3">
-                                    @if($art->image_path)
-                                        <img src="{{ asset($art->image_path) }}" alt="" class="w-10 h-10 rounded-lg object-cover shrink-0">
-                                    @endif
+                                    <div class="w-10 h-10 rounded-xl bg-neutral-100 overflow-hidden shrink-0 border border-neutral-200">
+                                        <img src="{{ asset($art->image_path ?: 'media/services/Better-therapy-thumbnail.jpg') }}" alt="" class="w-full h-full object-cover">
+                                    </div>
                                     <div>
                                         <a href="{{ route('articles.show', $art->slug) }}" target="_blank" class="font-bold text-neutral-900 hover:text-[#2D6A4F] line-clamp-1 block">
                                             {{ $art->title }}
                                         </a>
                                         @if($art->is_featured)
-                                            <span class="inline-block px-2 py-0.2 rounded bg-amber-100 text-amber-800 text-[9px] font-bold uppercase mt-0.5">Featured</span>
+                                            <span class="inline-block px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 text-[9px] font-bold uppercase mt-0.5">Featured</span>
                                         @endif
                                     </div>
                                 </div>
                             </td>
                             <td class="py-3.5 px-4">
-                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-neutral-100 text-neutral-700 uppercase">
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-neutral-100 text-neutral-700 capitalize">
                                     {{ $art->category }}
                                 </span>
                             </td>

@@ -8,15 +8,15 @@
     
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h2 class="text-xl font-bold text-neutral-900">Rekod Ujian Saringan Klien</h2>
-            <p class="text-xs text-neutral-500">Hasil saringan kendiri minda DASS-21 yang telah dihantar oleh pelawat.</p>
+            <h2 class="text-xl font-extrabold text-neutral-900 tracking-tight">Rekod Ujian Saringan Klien</h2>
+            <p class="text-xs text-neutral-500 mt-0.5">Hasil saringan kendiri minda DASS-21 yang telah dihantar oleh pelawat.</p>
         </div>
     </div>
 
-    <div class="bg-white rounded-3xl border border-neutral-200/90 shadow-2xs overflow-hidden">
+    <div class="bg-white rounded-2xl border border-neutral-200/90 shadow-2xs overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left text-xs text-neutral-600">
-                <thead class="bg-neutral-50 text-[11px] uppercase tracking-wider font-bold text-neutral-500 border-b border-neutral-200/80">
+                <thead class="bg-neutral-50/90 text-[10px] uppercase tracking-wider font-bold text-neutral-500 border-b border-neutral-200">
                     <tr>
                         <th class="py-3.5 px-4">ID</th>
                         <th class="py-3.5 px-4">Nama / Rujukan</th>
@@ -51,8 +51,9 @@
                                 {{ $sc->created_at->format('d/m/Y h:i A') }}
                             </td>
                             <td class="py-3.5 px-4 text-right">
-                                <a href="{{ route('admin.screeners.show', $sc->id) }}" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-neutral-100 hover:bg-[#2D6A4F] hover:text-white font-bold transition text-[11px]">
-                                    Lihat Jawapan &rarr;
+                                <a href="{{ route('admin.screeners.show', $sc->id) }}" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-neutral-100 hover:bg-[#2D6A4F] hover:text-white font-bold transition text-xs">
+                                    <span>Lihat Jawapan</span>
+                                    <span>&rarr;</span>
                                 </a>
                             </td>
                         </tr>
