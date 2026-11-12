@@ -37,11 +37,17 @@ class AdminPractitionerController extends Controller
             'bio' => ['nullable', 'string'],
             'specialties' => ['nullable', 'string'],
             'languages' => ['nullable', 'string'],
+            'photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'photo_path' => ['nullable', 'string', 'max:255'],
             'accepts_online' => ['boolean'],
             'accepts_in_person' => ['boolean'],
             'is_active' => ['boolean'],
         ]);
+
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('practitioners', 'public');
+            $validated['photo_path'] = 'storage/'.$path;
+        }
 
         $validated['slug'] = Str::slug($validated['name']).'-'.Str::random(4);
         $validated['specialties'] = array_map('trim', explode(',', $request->input('specialties', '')));
@@ -76,11 +82,17 @@ class AdminPractitionerController extends Controller
             'bio' => ['nullable', 'string'],
             'specialties' => ['nullable', 'string'],
             'languages' => ['nullable', 'string'],
+            'photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'photo_path' => ['nullable', 'string', 'max:255'],
             'accepts_online' => ['boolean'],
             'accepts_in_person' => ['boolean'],
             'is_active' => ['boolean'],
         ]);
+
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('practitioners', 'public');
+            $validated['photo_path'] = 'storage/'.$path;
+        }
 
         $validated['specialties'] = array_map('trim', explode(',', $request->input('specialties', '')));
         $validated['languages'] = array_map('trim', explode(',', $request->input('languages', '')));

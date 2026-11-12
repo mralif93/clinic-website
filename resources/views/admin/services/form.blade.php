@@ -14,6 +14,7 @@
 
     <form action="{{ $isEdit ? route('admin.services.update', $service->id) : route('admin.services.store') }}" 
           method="POST" 
+          enctype="multipart/form-data"
           class="bg-white rounded-3xl border border-neutral-200/90 p-6 sm:p-8 space-y-6 shadow-2xs">
         @csrf
         @if($isEdit)
@@ -84,7 +85,7 @@
             </div>
         </div>
 
-        {{-- Row 3: Durasi & Imej Path --}}
+        {{-- Row 3: Durasi & Muat Naik Imej Servis --}}
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
                 <label class="block text-[11px] font-bold text-neutral-600 uppercase tracking-wider mb-1.5">Durasi Sesi (Minit) *</label>
@@ -97,12 +98,25 @@
             </div>
 
             <div>
-                <label class="block text-[11px] font-bold text-neutral-600 uppercase tracking-wider mb-1.5">Laluan Imej (Asset Path)</label>
-                <input type="text" 
-                       name="image_path" 
-                       value="{{ old('image_path', $service->image_path ?: 'media/services/Better-therapy-thumbnail.jpg') }}" 
-                       placeholder="media/services/..." 
-                       class="w-full py-2.5 px-3 rounded-xl border border-neutral-300 text-xs bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-[#2D6A4F]">
+                <label class="block text-[11px] font-bold text-neutral-600 uppercase tracking-wider mb-1.5">Imej Banner Perkhidmatan</label>
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-neutral-100 overflow-hidden shrink-0 border border-neutral-200 shadow-2xs">
+                        <img id="service-image-preview" 
+                             src="{{ asset($service->image_path ?: 'media/services/Better-therapy-thumbnail.jpg') }}" 
+                             alt="Pratonton" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-1">
+                        <input type="file" 
+                               name="image" 
+                               id="service-image-input"
+                               accept="image/png,image/jpeg,image/webp" 
+                               onchange="previewServiceImage(event)"
+                               class="w-full text-xs text-neutral-600 file:mr-2.5 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
+                    </div>
+                </div>
+                <input type="hidden" name="image_path" value="{{ old('image_path', $service->image_path) }}">
+                @error('image') <p class="text-rose-500 text-[10px] mt-1">{{ $message }}</p> @enderror
             </div>
         </div>
 
@@ -155,6 +169,19 @@
             </button>
         </div>
     </form>
+
+    <script>
+        function previewServiceImage(event) {
+            const input = event.target;
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('service-image-preview').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 
 </div>
 @endsection

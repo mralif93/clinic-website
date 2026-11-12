@@ -39,12 +39,18 @@ class AdminServiceController extends Controller
             'price' => ['required', 'numeric', 'min:0'],
             'deposit_amount' => ['required', 'numeric', 'min:0'],
             'duration_minutes' => ['required', 'integer', 'min:15'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'image_path' => ['nullable', 'string', 'max:255'],
             'allows_online' => ['boolean'],
             'allows_in_person' => ['boolean'],
             'is_featured' => ['boolean'],
             'is_active' => ['boolean'],
         ]);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('services', 'public');
+            $validated['image_path'] = 'storage/'.$path;
+        }
 
         $validated['slug'] = Str::slug($validated['name']).'-'.Str::random(4);
         $validated['allows_online'] = $request->boolean('allows_online');
@@ -80,12 +86,18 @@ class AdminServiceController extends Controller
             'price' => ['required', 'numeric', 'min:0'],
             'deposit_amount' => ['required', 'numeric', 'min:0'],
             'duration_minutes' => ['required', 'integer', 'min:15'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'image_path' => ['nullable', 'string', 'max:255'],
             'allows_online' => ['boolean'],
             'allows_in_person' => ['boolean'],
             'is_featured' => ['boolean'],
             'is_active' => ['boolean'],
         ]);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('services', 'public');
+            $validated['image_path'] = 'storage/'.$path;
+        }
 
         $validated['allows_online'] = $request->boolean('allows_online');
         $validated['allows_in_person'] = $request->boolean('allows_in_person');
