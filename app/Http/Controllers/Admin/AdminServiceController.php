@@ -1,0 +1,107 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Service;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
+class AdminServiceController extends Controller
+{
+    public function index(): View
+    {
+        $services = Service::orderBy('sort_order')->paginate(15);
+
+        return view('admin.services.index', [
+            'services' => $services,
+        ]);
+    }
+
+    public function create(): View
+    {
+        return view('admin.services.form', [
+            'service' => new Service,
+            'isEdit' => false,
+        ]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'category' => ['required', 'string', 'max:100'],
+            'target_audience' => ['nullable', 'string', 'max:255'],
+            'summary' => ['nullable', 'string', 'max:500'],
+            'description' => ['nullable', 'string'],
+            'price' => ['required', 'numeric', 'min:0'],
+            'deposit_amount' => ['required', 'numeric', 'min:0'],
+            'duration_minutes' => ['required', 'integer', 'min:15'],
+            'image_path' => ['nullable', 'string', 'max:255'],
+            'allows_online' => ['boolean'],
+            'allows_in_person' => ['boolean'],
+            'is_featured' => ['boolean'],
+            'is_active' => ['boolean'],
+        ]);
+
+        $validated['slug'] = Str::slug($validated['name']).'-'.Str::random(4);
+        $validated['allows_online'] = $request->boolean('allows_online');
+        $validated['allows_in_person'] = $request->boolean('allows_in_person');
+        $validated['is_featured'] = $request->boolean('is_featured');
+        $validated['is_active'] = $request->boolean('is_active');
+
+        Service::create($validated);
+
+        return redirect()->route('admin.services.index')->with('success', 'Perkhidmatan baharu berjaya ditambah.');
+    }
+
+    public function edit(int $id): View
+    {
+        $service = Service::findOrFail($id);
+
+        return view('admin.services.form', [
+            'service' => $service,
+            'isEdit' => true,
+        ]);
+    }
+
+    public function update(Request $request, int $id): RedirectResponse
+    {
+        $service = Service::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'category' => ['required', 'string', 'max:100'],
+            'target_audience' => ['nullable', 'string', 'max:255'],
+            'summary' => ['nullable', 'string', 'max:500'],
+            'description' => ['nullable', 'string'],
+            'price' => ['required', 'numeric', 'min:0'],
+            'deposit_amount' => ['required', 'numeric', 'min:0'],
+            'duration_minutes' => ['required', 'integer', 'min:15'],
+            'image_path' => ['nullable', 'string', 'max:255'],
+            'allows_online' => ['boolean'],
+            'allows_in_person' => ['boolean'],
+            'is_featured' => ['boolean'],
+            'is_active' => ['boolean'],
+        ]);
+
+        $validated['allows_online'] = $request->boolean('allows_online');
+        $validated['allows_in_person'] = $request->boolean('allows_in_person');
+        $validated['is_featured'] = $request->boolean('is_featured');
+        $validated['is_active'] = $request->boolean('is_active');
+
+        $service->update($validated);
+
+        return redirect()->route('admin.services.index')->with('success', 'Maklumat perkhidmatan berjaya dikemaskini.');
+    }
+
+    public function destroy(int $id): RedirectResponse
+    {
+        $service = Service::findOrFail($id);
+        $service->delete();
+
+        return redirect()->route('admin.services.index')->with('success', 'Perkhidmatan telah dipadam.');
+    }
+}

@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminAppointmentController;
+use App\Http\Controllers\Admin\AdminArticleController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminPractitionerController;
 use App\Http\Controllers\Admin\AdminScreenerController;
+use App\Http\Controllers\Admin\AdminServiceController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\BookingController;
@@ -69,5 +72,14 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         // Pengurusan Ujian Saringan
         Route::get('/ujian-saringan', [AdminScreenerController::class, 'index'])->name('screeners.index');
         Route::get('/ujian-saringan/{id}', [AdminScreenerController::class, 'show'])->name('screeners.show');
+
+        // Pengurusan Perkhidmatan (CRUD)
+        Route::resource('services', AdminServiceController::class)->except(['show']);
+
+        // Pengurusan Pakar (CRUD)
+        Route::resource('practitioners', AdminPractitionerController::class)->except(['show']);
+
+        // Pengurusan Artikel (CRUD)
+        Route::resource('articles', AdminArticleController::class)->except(['show']);
     });
 });
