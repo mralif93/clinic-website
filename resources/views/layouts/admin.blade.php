@@ -20,7 +20,7 @@
 
     {{-- Admin Sidebar Navigation --}}
     <aside id="admin-sidebar" 
-           class="fixed inset-y-0 left-0 z-50 w-64 bg-neutral-900 text-neutral-300 flex flex-col shrink-0 border-r border-neutral-800 -translate-x-full md:translate-x-0 md:static md:z-auto transition-transform duration-300 ease-in-out">
+           class="fixed inset-y-0 left-0 z-50 w-64 bg-neutral-900 text-neutral-300 flex flex-col shrink-0 border-r border-neutral-800 -translate-x-full md:translate-x-0 md:static md:z-auto transition-all duration-300 ease-in-out">
         
         {{-- Brand --}}
         <div class="h-16 px-5 flex items-center justify-between border-b border-neutral-800">
@@ -33,12 +33,24 @@
                     <span class="text-[9px] text-emerald-400 font-bold uppercase tracking-widest block mt-0.5">Portal Admin</span>
                 </div>
             </a>
-            {{-- Mobile Close Button --}}
-            <button type="button" 
-                    onclick="toggleAdminSidebar()" 
-                    class="md:hidden p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-            </button>
+            
+            <div class="flex items-center gap-1">
+                {{-- Desktop Collapse Button inside Sidebar --}}
+                <button type="button" 
+                        onclick="toggleAdminSidebar()" 
+                        class="hidden md:flex p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition" 
+                        title="Sembunyikan Sidebar">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/></svg>
+                </button>
+
+                {{-- Mobile Close Button --}}
+                <button type="button" 
+                        onclick="toggleAdminSidebar()" 
+                        class="md:hidden p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition"
+                        title="Tutup Menu">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
         </div>
 
         {{-- Nav Links --}}
@@ -106,10 +118,11 @@
         {{-- Topbar --}}
         <header class="h-16 bg-white border-b border-neutral-200/90 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30">
             <div class="flex items-center gap-3">
-                {{-- Mobile Hamburger Toggle --}}
+                {{-- Toggle Sidebar Button (Supports both Mobile and Desktop Hide/Show) --}}
                 <button type="button" 
                         onclick="toggleAdminSidebar()" 
-                        class="md:hidden p-2 rounded-xl text-neutral-600 hover:bg-neutral-100 transition">
+                        class="p-2 rounded-xl text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 transition border border-transparent hover:border-neutral-200"
+                        title="Buka / Tutup Sidebar">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
 
@@ -152,18 +165,29 @@
         </main>
     </div>
 
-    {{-- Script for Toggle Mobile Admin Sidebar --}}
+    {{-- Script for Toggle Admin Sidebar (Desktop & Mobile) --}}
     <script>
         function toggleAdminSidebar() {
             const sidebar = document.getElementById('admin-sidebar');
             const backdrop = document.getElementById('admin-mobile-backdrop');
+            const isDesktop = window.innerWidth >= 768;
             
-            if (sidebar.classList.contains('-translate-x-full')) {
-                sidebar.classList.remove('-translate-x-full');
-                backdrop.classList.remove('hidden');
+            if (isDesktop) {
+                // Desktop toggle (hide/show)
+                if (sidebar.classList.contains('md:hidden')) {
+                    sidebar.classList.remove('md:hidden');
+                } else {
+                    sidebar.classList.add('md:hidden');
+                }
             } else {
-                sidebar.classList.add('-translate-x-full');
-                backdrop.classList.add('hidden');
+                // Mobile slide-over drawer toggle
+                if (sidebar.classList.contains('-translate-x-full')) {
+                    sidebar.classList.remove('-translate-x-full');
+                    backdrop.classList.remove('hidden');
+                } else {
+                    sidebar.classList.add('-translate-x-full');
+                    backdrop.classList.add('hidden');
+                }
             }
         }
     </script>
