@@ -8,8 +8,8 @@
     {{-- Header Actions --}}
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-            <h2 class="text-xl sm:text-2xl font-extrabold text-neutral-900 tracking-tight">Katalog Perkhidmatan & Sesi Terapi</h2>
-            <p class="text-xs text-neutral-500 mt-1 max-w-2xl leading-relaxed">
+            <h2 class="text-xl font-extrabold text-neutral-900 tracking-tight">Katalog Perkhidmatan & Sesi Terapi</h2>
+            <p class="text-xs text-neutral-500 mt-1 leading-relaxed">
                 Urus pakej rawatan, kadar yuran sesi, deposit tempahan, dan mod konsultasi klinik.
             </p>
         </div>

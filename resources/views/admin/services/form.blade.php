@@ -4,7 +4,7 @@
 @section('page_title', ($isEdit ? 'Kemaskini' : 'Tambah') . ' Perkhidmatan Terapi')
 
 @section('admin_content')
-<div class="max-w-4xl space-y-6">
+<div class="space-y-6">
 
     <div class="flex items-center justify-between">
         <a href="{{ route('admin.services.index') }}" class="text-xs font-bold text-neutral-500 hover:text-neutral-800 flex items-center gap-1">
