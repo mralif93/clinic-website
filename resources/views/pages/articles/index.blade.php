@@ -88,42 +88,45 @@
             @forelse($articles as $article)
                 <article class="rounded-3xl border border-neutral-200/80 bg-white overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
                     <div>
-                        <div class="h-48 overflow-hidden bg-neutral-100 relative">
+                        <div class="h-52 overflow-hidden bg-neutral-100 relative">
                             <img src="{{ asset($article->image_path ?: 'media/services/Better-therapy-thumbnail.jpg') }}" 
                                  alt="{{ $article->title }}" 
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                            <div class="absolute top-3 left-3">
-                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-white/95 text-[#2D6A4F] shadow-xs uppercase">
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-3.5 left-3.5">
+                                <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-white/95 text-[#2D6A4F] shadow-xs tracking-wide">
                                     {{ $categories[$article->category] ?? ucfirst($article->category) }}
                                 </span>
                             </div>
                         </div>
 
                         <div class="p-6">
-                            <div class="flex items-center gap-2 text-[11px] text-neutral-400 mb-2">
-                                <span>{{ $article->author_name }}</span>
+                            <div class="flex items-center gap-2 text-xs text-neutral-400 mb-2.5">
+                                <span class="font-medium text-neutral-500">{{ $article->author_name }}</span>
                                 <span>•</span>
                                 <span>{{ $article->read_time_minutes }} minit bacaan</span>
                             </div>
 
-                            <h3 class="text-lg font-bold text-neutral-900 group-hover:text-[#2D6A4F] transition-colors line-clamp-2 leading-snug mb-2">
+                            <h3 class="text-lg font-bold text-neutral-900 group-hover:text-[#2D6A4F] transition-colors line-clamp-2 leading-snug mb-3 tracking-tight">
                                 <a href="{{ route('articles.show', $article->slug) }}">
                                     {{ $article->title }}
                                 </a>
                             </h3>
 
-                            <p class="text-xs text-neutral-600 line-clamp-3 leading-relaxed">
+                            <p class="text-[13px] text-neutral-600 line-clamp-3 leading-relaxed font-normal">
                                 {{ $article->summary }}
                             </p>
                         </div>
                     </div>
 
-                    <div class="p-6 pt-0 border-t border-neutral-100 mt-2 flex items-center justify-between">
-                        <a href="{{ route('articles.show', $article->slug) }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#2D6A4F] hover:text-[#1E4634] transition">
+                    <div class="px-6 py-4 border-t border-neutral-100 flex items-center justify-between bg-neutral-50/40">
+                        <a href="{{ route('articles.show', $article->slug) }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#2D6A4F] group-hover:text-[#1E4634] transition">
                             <span>Baca Artikel</span>
-                            <span>&rarr;</span>
+                            <span class="text-sm font-semibold transition-transform group-hover:translate-x-1 duration-200">&rarr;</span>
                         </a>
-                        <span class="text-[11px] text-neutral-400 font-mono">{{ number_format($article->views_count) }} tontonan</span>
+                        <div class="inline-flex items-center gap-1 text-xs text-neutral-400">
+                            <svg class="w-3.5 h-3.5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                            <span>{{ number_format($article->views_count) }} tontonan</span>
+                        </div>
                     </div>
                 </article>
             @empty

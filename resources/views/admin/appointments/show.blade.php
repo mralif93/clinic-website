@@ -76,46 +76,85 @@
         </div>
 
         {{-- Status Update Action Card --}}
-        <div class="bg-white rounded-3xl border border-neutral-200/90 p-6 space-y-5 shadow-2xs h-fit">
-            <h3 class="text-sm font-bold text-neutral-900 border-b border-neutral-100 pb-3">Tindakan & Pengesahan</h3>
-
-            <form action="{{ route('admin.appointments.update-status', $appointment->id) }}" method="POST" class="space-y-4">
-                @csrf
-                @method('PATCH')
-
-                <div>
-                    <label class="block text-[11px] font-bold text-neutral-600 uppercase tracking-wider mb-1.5">Status Tempahan:</label>
-                    <select name="status" class="w-full py-2.5 px-3 rounded-xl border border-neutral-300 text-xs bg-white font-medium">
-                        <option value="pending" {{ $appointment->status === 'pending' ? 'selected' : '' }}>Pending (Menunggu)</option>
-                        <option value="confirmed" {{ $appointment->status === 'confirmed' ? 'selected' : '' }}>Confirmed (Disahkan)</option>
-                        <option value="completed" {{ $appointment->status === 'completed' ? 'selected' : '' }}>Completed (Selesai)</option>
-                        <option value="cancelled" {{ $appointment->status === 'cancelled' ? 'selected' : '' }}>Cancelled (Batal)</option>
-                    </select>
+        <div class="space-y-6">
+            
+            {{-- Quick WhatsApp Confirmation Card --}}
+            <div class="bg-gradient-to-br from-emerald-900 to-emerald-950 rounded-3xl p-6 text-white shadow-xs space-y-3">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-300">Hubungi Pantas Klien</span>
                 </div>
+                <h4 class="text-sm font-bold">Mesej WhatsApp Automatik</h4>
+                <p class="text-[11px] text-emerald-200/80 leading-relaxed">
+                    Hantar mesej pengesahan rasmi kepada {{ $appointment->client_name }} dengan butiran sesi lengkap.
+                </p>
+                @php
+                    $cleanPhone = preg_replace('/[^0-9]/', '', $appointment->client_phone);
+                    if (str_starts_with($cleanPhone, '0')) {
+                        $cleanPhone = '60' . substr($cleanPhone, 1);
+                    }
+                    $modeLabel = $appointment->session_mode === 'in_person' ? 'Fizikal di Sakeenah Medicare, Cyberjaya' : 'Dalam Talian (Tele-Terapi)';
+                    $waText = "Salam sejahtera " . $appointment->client_name . ",\n\nIni adalah pengesahan sesi temu janji terapi anda di Sakeenah Medicare:\n" .
+                              "• Kod Tempahan: " . $appointment->booking_code . "\n" .
+                              "• Perkhidmatan: " . $appointment->service->name . "\n" .
+                              "• Tarikh: " . $appointment->appointment_date->format('d/m/Y') . "\n" .
+                              "• Masa: " . $appointment->appointment_time . "\n" .
+                              "• Mod: " . $modeLabel . "\n" .
+                              "• Status: " . ucfirst($appointment->status) . "\n\n" .
+                              "Sebarang pertanyaan atau pertukaran jadual, sila maklumkan kepada pihak klinik. Terima kasih.";
+                @endphp
+                <a href="https://wa.me/{{ $cleanPhone }}?text={{ urlencode($waText) }}" 
+                   target="_blank" 
+                   rel="noopener noreferrer" 
+                   class="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-white hover:bg-emerald-50 text-emerald-900 font-bold text-xs shadow-xs transition">
+                    <svg class="w-4 h-4 fill-current text-emerald-700" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg>
+                    <span>Kirim WhatsApp Pengesahan</span>
+                </a>
+            </div>
 
-                <div>
-                    <label class="block text-[11px] font-bold text-neutral-600 uppercase tracking-wider mb-1.5">Status Bayaran Deposit:</label>
-                    <select name="payment_status" class="w-full py-2.5 px-3 rounded-xl border border-neutral-300 text-xs bg-white font-medium">
-                        <option value="pending" {{ $appointment->payment_status === 'pending' ? 'selected' : '' }}>Pending (RM {{ number_format($appointment->deposit_amount, 2) }})</option>
-                        <option value="paid" {{ $appointment->payment_status === 'paid' ? 'selected' : '' }}>Paid (Telah Dibayar)</option>
-                        <option value="refunded" {{ $appointment->payment_status === 'refunded' ? 'selected' : '' }}>Refunded (Dipulangkan)</option>
-                    </select>
-                </div>
+            {{-- Form Status Update --}}
+            <div class="bg-white rounded-3xl border border-neutral-200/90 p-6 space-y-5 shadow-2xs">
+                <h3 class="text-sm font-bold text-neutral-900 border-b border-neutral-100 pb-3">Tindakan & Pengesahan</h3>
 
-                <div>
-                    <label class="block text-[11px] font-bold text-neutral-600 uppercase tracking-wider mb-1.5">Pautan Mesyuarat (Tele-terapi):</label>
-                    <input type="url" name="meeting_url" value="{{ old('meeting_url', $appointment->meeting_url) }}" placeholder="https://meet.google.com/..." class="w-full py-2.5 px-3 rounded-xl border border-neutral-300 text-xs bg-white">
-                </div>
+                <form action="{{ route('admin.appointments.update-status', $appointment->id) }}" method="POST" class="space-y-4">
+                    @csrf
+                    @method('PATCH')
 
-                <div>
-                    <label class="block text-[11px] font-bold text-neutral-600 uppercase tracking-wider mb-1.5">Nota Staf / Resit:</label>
-                    <textarea name="admin_notes" rows="3" placeholder="Catatan dalaman staf..." class="w-full py-2.5 px-3 rounded-xl border border-neutral-300 text-xs bg-white">{{ old('admin_notes', $appointment->admin_notes) }}</textarea>
-                </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-neutral-600 uppercase tracking-wider mb-1.5">Status Tempahan:</label>
+                        <select name="status" class="w-full py-2.5 px-3 rounded-xl border border-neutral-300 text-xs bg-white font-medium focus:ring-2 focus:ring-emerald-500/20 focus:border-[#2D6A4F]">
+                            <option value="pending" {{ $appointment->status === 'pending' ? 'selected' : '' }}>Pending (Menunggu)</option>
+                            <option value="confirmed" {{ $appointment->status === 'confirmed' ? 'selected' : '' }}>Confirmed (Disahkan)</option>
+                            <option value="completed" {{ $appointment->status === 'completed' ? 'selected' : '' }}>Completed (Selesai)</option>
+                            <option value="cancelled" {{ $appointment->status === 'cancelled' ? 'selected' : '' }}>Cancelled (Batal)</option>
+                        </select>
+                    </div>
 
-                <button type="submit" class="w-full py-3 rounded-full text-xs font-bold text-white bg-[#2D6A4F] hover:bg-[#1E4634] shadow transition">
-                    Simpan Perubahan
-                </button>
-            </form>
+                    <div>
+                        <label class="block text-[11px] font-bold text-neutral-600 uppercase tracking-wider mb-1.5">Status Bayaran Deposit:</label>
+                        <select name="payment_status" class="w-full py-2.5 px-3 rounded-xl border border-neutral-300 text-xs bg-white font-medium focus:ring-2 focus:ring-emerald-500/20 focus:border-[#2D6A4F]">
+                            <option value="pending" {{ $appointment->payment_status === 'pending' ? 'selected' : '' }}>Pending (RM {{ number_format($appointment->deposit_amount, 2) }})</option>
+                            <option value="paid" {{ $appointment->payment_status === 'paid' ? 'selected' : '' }}>Paid (Telah Dibayar)</option>
+                            <option value="refunded" {{ $appointment->payment_status === 'refunded' ? 'selected' : '' }}>Refunded (Dipulangkan)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-neutral-600 uppercase tracking-wider mb-1.5">Pautan Mesyuarat (Tele-terapi):</label>
+                        <input type="url" name="meeting_url" value="{{ old('meeting_url', $appointment->meeting_url) }}" placeholder="https://meet.google.com/..." class="w-full py-2.5 px-3 rounded-xl border border-neutral-300 text-xs bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-[#2D6A4F]">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-neutral-600 uppercase tracking-wider mb-1.5">Nota Staf / Resit:</label>
+                        <textarea name="admin_notes" rows="3" placeholder="Catatan dalaman staf..." class="w-full py-2.5 px-3 rounded-xl border border-neutral-300 text-xs bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-[#2D6A4F]">{{ old('admin_notes', $appointment->admin_notes) }}</textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 rounded-xl text-xs font-bold text-white bg-[#2D6A4F] hover:bg-[#1E4634] shadow-xs transition">
+                        Simpan Perubahan
+                    </button>
+                </form>
+            </div>
+
         </div>
 
     </div>

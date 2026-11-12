@@ -38,10 +38,6 @@
             {{-- Brand Logo --}}
             <a href="{{ route('home') }}" class="flex items-center gap-2.5 sm:gap-3 group shrink-0">
                 <img src="{{ asset('media/logos/1.png') }}" alt="Sakeenah Medicare Logo" class="h-9 sm:h-11 w-auto object-contain transition-transform group-hover:scale-105 duration-200">
-                <div class="flex flex-col">
-                    <span class="text-lg sm:text-xl font-bold tracking-tight text-[#2D6A4F] leading-none">SAKEENAH</span>
-                    <span class="text-[10px] sm:text-xs font-semibold tracking-widest text-neutral-500 uppercase">Medicare</span>
-                </div>
             </a>
 
             {{-- Desktop Navigation Links (Large Screens) --}}
@@ -127,65 +123,65 @@
         @yield('content')
     </main>
 
-    {{-- Footer (Fully Responsive) --}}
-    <footer class="bg-neutral-900 text-neutral-300 pt-12 sm:pt-16 pb-12 border-t border-neutral-800">
+    {{-- Footer (Standard, Kemas & Padat) --}}
+    <footer class="bg-neutral-900 text-neutral-300 pt-10 pb-8 border-t border-neutral-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 pb-12 border-b border-neutral-800">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pb-8 border-b border-neutral-800/80">
                 
                 {{-- Column 1: Info Sakeenah --}}
-                <div class="space-y-4 sm:col-span-2 lg:col-span-1">
-                    <div class="flex items-center gap-3">
-                        <img src="{{ asset('media/logos/1.png') }}" alt="Sakeenah Medicare Logo" class="h-10 w-auto brightness-0 invert">
-                        <span class="text-xl font-bold tracking-tight text-white">SAKEENAH</span>
+                <div class="space-y-3 sm:col-span-2 lg:col-span-1">
+                    <div class="flex items-center gap-2.5">
+                        <img src="{{ asset('media/logos/1.png') }}" alt="Sakeenah Medicare Logo" class="h-8 w-auto brightness-0 invert">
+                        <span class="text-lg font-bold tracking-tight text-white">SAKEENAH</span>
                     </div>
-                    <p class="text-xs sm:text-sm text-neutral-400 leading-relaxed">
-                        Pusat Psikologi & Kesejahteraan Emosi yang menyediakan ruang selamat, profesional dan tanpa penghakiman untuk pemulihan dan pertumbuhan kendiri anda sekeluarga.
+                    <p class="text-xs text-neutral-400 leading-relaxed">
+                        Pusat Psikologi & Kesejahteraan Emosi di Cyberjaya. Ruang selamat, bertauliah dan tanpa prejudis untuk rawatan minda anda sekeluarga.
                     </p>
-                    <div class="pt-2 text-[11px] sm:text-xs text-emerald-400 font-medium">
-                        ✓ Berdaftar & Mematuhi Piawaian Etika Lembaga Kaunselor Malaysia & MAHPC.
+                    <div class="text-[11px] text-emerald-400 font-medium">
+                        ✓ Berdaftar Lembaga Kaunselor Malaysia & MAHPC
                     </div>
                 </div>
 
                 {{-- Column 2: Perkhidmatan --}}
                 <div>
-                    <h3 class="text-xs sm:text-sm font-semibold uppercase tracking-wider text-white mb-3 sm:mb-4">Perkhidmatan Klinikal</h3>
-                    <ul class="space-y-2 text-xs sm:text-sm text-neutral-400">
-                        <li><a href="{{ route('services.index') }}" class="hover:text-emerald-400 transition">Psikoterapi Individu (Dewasa)</a></li>
-                        <li><a href="{{ route('services.index') }}" class="hover:text-emerald-400 transition">Penilaian Diagnostik (ADHD & Autisme)</a></li>
-                        <li><a href="{{ route('services.index') }}" class="hover:text-emerald-400 transition">Terapi Pasangan & Perkahwinan</a></li>
-                        <li><a href="{{ route('services.index') }}" class="hover:text-emerald-400 transition">Terapi Pertuturan & Carakerja (Speech & OT)</a></li>
-                        <li><a href="{{ route('services.index') }}" class="hover:text-emerald-400 transition">Program Bantuan Pekerja (EAP Korporat)</a></li>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-white mb-3">Perkhidmatan</h4>
+                    <ul class="space-y-1.5 text-xs text-neutral-400">
+                        <li><a href="{{ route('services.index') }}" class="hover:text-emerald-400 transition">Psikoterapi Individu</a></li>
+                        <li><a href="{{ route('services.index') }}" class="hover:text-emerald-400 transition">Penilaian ADHD & Autisme</a></li>
+                        <li><a href="{{ route('services.index') }}" class="hover:text-emerald-400 transition">Terapi Pasangan & Keluarga</a></li>
+                        <li><a href="{{ route('services.index') }}" class="hover:text-emerald-400 transition">Terapi Pertuturan & Carakerja</a></li>
+                        <li><a href="{{ route('services.index') }}" class="hover:text-emerald-400 transition">Program Korporat (EAP)</a></li>
                     </ul>
                 </div>
 
                 {{-- Column 3: Pautan Pantas --}}
                 <div>
-                    <h3 class="text-xs sm:text-sm font-semibold uppercase tracking-wider text-white mb-3 sm:mb-4">Pautan Pantas</h3>
-                    <ul class="space-y-2 text-xs sm:text-sm text-neutral-400">
-                        <li><a href="{{ route('about') }}" class="hover:text-emerald-400 transition">Mengenai Klinik Kami</a></li>
-                        <li><a href="{{ route('practitioners.index') }}" class="hover:text-emerald-400 transition">Direktori Pakar & Terapis</a></li>
-                        <li><a href="{{ route('articles.index') }}" class="hover:text-emerald-400 transition">Hab Artikel & Psikoedukasi</a></li>
-                        <li><a href="{{ route('screener.index') }}" class="hover:text-emerald-400 transition">Ujian Saringan Minda (DASS-21)</a></li>
-                        <li><a href="{{ route('booking.index') }}" class="hover:text-emerald-400 transition">Tempah Sesi Temu Janji</a></li>
-                        <li><a href="https://t.me/sakeenahcommunity" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition">Komuniti Telegram Sakeenah</a></li>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-white mb-3">Pautan Pantas</h4>
+                    <ul class="space-y-1.5 text-xs text-neutral-400">
+                        <li><a href="{{ route('about') }}" class="hover:text-emerald-400 transition">Tentang Klinik</a></li>
+                        <li><a href="{{ route('practitioners.index') }}" class="hover:text-emerald-400 transition">Direktori Pakar</a></li>
+                        <li><a href="{{ route('articles.index') }}" class="hover:text-emerald-400 transition">Hab Artikel</a></li>
+                        <li><a href="{{ route('screener.index') }}" class="hover:text-emerald-400 transition">Ujian Saringan (DASS-21)</a></li>
+                        <li><a href="{{ route('booking.index') }}" class="hover:text-emerald-400 transition">Tempah Sesi</a></li>
+                        <li><a href="{{ route('admin.login') }}" class="text-neutral-500 hover:text-neutral-300 text-[11px]">Portal Kakitangan &rarr;</a></li>
                     </ul>
                 </div>
 
                 {{-- Column 4: Lokasi & Hubungi --}}
                 <div class="sm:col-span-2 lg:col-span-1">
-                    <h3 class="text-xs sm:text-sm font-semibold uppercase tracking-wider text-white mb-3 sm:mb-4">Klinik Kami di Cyberjaya</h3>
-                    <div class="space-y-3 text-xs sm:text-sm text-neutral-400">
-                        <p class="flex items-start gap-2.5">
-                            <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                            <span>P3-03, Shaftsbury Square, Persiaran Multimedia, Cyber 6, 63000 Cyberjaya, Selangor</span>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-white mb-3">Klinik Kami</h4>
+                    <div class="space-y-2 text-xs text-neutral-400">
+                        <p class="leading-relaxed">
+                            P3-03, Shaftsbury Square, Persiaran Multimedia, Cyber 6, 63000 Cyberjaya, Selangor
                         </p>
-                        <p class="flex items-center gap-2.5">
-                            <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                            <span>+60 11-7035 2636</span>
+                        <p>
+                            <a href="tel:+601170352636" class="hover:text-white transition">Tel: +60 11-7035 2636</a>
                         </p>
-                        <p class="flex items-center gap-2.5">
-                            <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                            <span>sakeenahmedicare@gmail.com</span>
+                        <p>
+                            <a href="mailto:sakeenahmedicare@gmail.com" class="hover:text-white transition">sakeenahmedicare@gmail.com</a>
+                        </p>
+                        <p class="text-[11px] text-neutral-500 pt-1">
+                            Isnin – Ahad (9:00 AM – 9:00 PM)
                         </p>
                     </div>
                 </div>
@@ -193,12 +189,11 @@
             </div>
 
             {{-- Copyright & Privacy Statement --}}
-            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] sm:text-xs text-neutral-500 gap-3 text-center sm:text-left">
-                <p>&copy; {{ date('Y') }} Sakeenah Medicare (SKMED). Hak Cipta Terpelihara. Maklumat pesakit dilindungi di bawah Akta Perlindungan Data Peribadi (PDPA).</p>
-                <div class="flex items-center gap-4 sm:gap-6">
-                    <a href="#" class="hover:text-neutral-400">Dasar Privasi</a>
-                    <a href="#" class="hover:text-neutral-400">Terma</a>
-                    <a href="#" class="hover:text-neutral-400">Persetujuan Klien</a>
+            <div class="pt-6 flex flex-col sm:flex-row items-center justify-between text-[11px] text-neutral-500 gap-2 text-center sm:text-left">
+                <p>&copy; {{ date('Y') }} Sakeenah Medicare (SKMED). Hak Cipta Terpelihara. Maklumat pesakit dilindungi di bawah PDPA.</p>
+                <div class="flex items-center gap-4">
+                    <a href="https://wa.me/601170352636" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition">WhatsApp Rasmi</a>
+                    <a href="https://t.me/sakeenahcommunity" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition">Komuniti Telegram</a>
                 </div>
             </div>
         </div>

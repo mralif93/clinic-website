@@ -10,14 +10,28 @@ use Illuminate\Http\Request;
 
 class AdminAppointmentController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $appointments = Appointment::with(['service', 'practitioner'])
-            ->latest()
-            ->paginate(15);
+        $status = $request->query('status');
+
+        $query = Appointment::with(['service', 'practitioner'])->latest();
+
+        if ($status && in_array($status, ['pending', 'confirmed', 'completed', 'cancelled'])) {
+            $query->where('status', $status);
+        }
+
+        $appointments = $query->paginate(15)->withQueryString();
 
         return view('admin.appointments.index', [
             'appointments' => $appointments,
+            'currentStatus' => $status,
+            'statusCounts' => [
+                'all' => Appointment::count(),
+                'pending' => Appointment::where('status', 'pending')->count(),
+                'confirmed' => Appointment::where('status', 'confirmed')->count(),
+                'completed' => Appointment::where('status', 'completed')->count(),
+                'cancelled' => Appointment::where('status', 'cancelled')->count(),
+            ],
         ]);
     }
 
