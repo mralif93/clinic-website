@@ -23,14 +23,16 @@
            class="fixed inset-y-0 left-0 z-50 w-64 bg-neutral-900 text-neutral-300 flex flex-col shrink-0 border-r border-neutral-800 -translate-x-full md:translate-x-0 md:static md:z-auto transition-transform duration-300 ease-in-out">
         
         {{-- Brand --}}
-        <div class="h-16 px-6 flex items-center justify-between border-b border-neutral-800">
-            <div class="flex items-center gap-3">
-                <img src="{{ asset('media/logos/1.png') }}" alt="Sakeenah Logo" class="h-8 w-auto brightness-0 invert">
-                <div>
-                    <span class="font-bold text-white tracking-tight block leading-none text-sm">SAKEENAH</span>
-                    <span class="text-[9px] text-emerald-400 font-semibold uppercase tracking-widest">Portal Admin</span>
+        <div class="h-16 px-5 flex items-center justify-between border-b border-neutral-800">
+            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 group">
+                <div class="w-9 h-9 rounded-xl bg-white/10 p-1 flex items-center justify-center border border-white/10 overflow-hidden shrink-0">
+                    <img src="{{ asset('media/logos/cropped-8c3e544b-6b9a-42f8-bf7d-7a5d1e4e9cfd.png') }}" alt="Sakeenah Logo" class="w-full h-full object-contain">
                 </div>
-            </div>
+                <div>
+                    <span class="font-extrabold text-white tracking-tight block leading-none text-sm">SAKEENAH</span>
+                    <span class="text-[9px] text-emerald-400 font-bold uppercase tracking-widest block mt-0.5">Portal Admin</span>
+                </div>
+            </a>
             {{-- Mobile Close Button --}}
             <button type="button" 
                     onclick="toggleAdminSidebar()" 
@@ -102,7 +104,7 @@
     {{-- Main Content Area --}}
     <div class="flex-1 flex flex-col min-w-0">
         {{-- Topbar --}}
-        <header class="h-16 bg-white border-b border-neutral-200 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30">
+        <header class="h-16 bg-white border-b border-neutral-200/90 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30">
             <div class="flex items-center gap-3">
                 {{-- Mobile Hamburger Toggle --}}
                 <button type="button" 
@@ -113,16 +115,16 @@
 
                 <div>
                     <h1 class="text-sm sm:text-base font-bold text-neutral-900 leading-tight">@yield('page_title', 'Papan Pemuka')</h1>
-                    <span class="text-[10px] text-neutral-400 hidden sm:block">Sistem Pengurusan Klinik Sakeenah Medicare</span>
+                    <span class="text-[11px] text-neutral-400 hidden sm:block">Sistem Pengurusan Klinik Sakeenah Medicare</span>
                 </div>
             </div>
 
             <div class="flex items-center gap-3">
                 <div class="hidden sm:flex flex-col text-right">
                     <span class="text-xs font-bold text-neutral-800 leading-tight">{{ auth()->user()->name ?? 'Pentadbir' }}</span>
-                    <span class="text-[10px] text-emerald-600 font-medium">Staf Bertauliah</span>
+                    <span class="text-[10px] text-emerald-600 font-semibold tracking-wide">Staf Bertauliah</span>
                 </div>
-                <div class="w-8 h-8 rounded-full bg-emerald-100 text-[#2D6A4F] font-bold text-xs flex items-center justify-center border border-emerald-200">
+                <div class="w-9 h-9 rounded-xl bg-[#2D6A4F] text-white font-bold text-xs flex items-center justify-center shadow-xs">
                     {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
                 </div>
             </div>
