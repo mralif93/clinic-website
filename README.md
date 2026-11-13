@@ -1,58 +1,154 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sakeenah Medicare (SKMED) - Platform Pengurusan Klinik & Kesihatan Mental
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Platform web rasmi dan sistem portal pengurusan pentadbiran klinik psikologi dan terapi **Sakeenah Medicare** yang beroperasi di Cyberjaya, Malaysia. Dibina menggunakan Laravel 13, Tailwind CSS v4, dan pangkalan data SQLite/MySQL.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🌟 Ciri-Ciri Utama Sistem
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 1. Laman Awam (Public Portal)
+- **Halaman Utama (Landing Page):** Pengenalan perkhidmatan klinikal, direktori pakar/terapis, artikel psikoedukasi, dan testimoni.
+- **Sistem Tempahan Janji Temu (Online Booking Flow):**
+  - Pemilihan perkhidmatan (Diagnostik, Kaunseling, Terapi Kanak-kanak / Dewasa / Pasangan).
+  - Pemilihan mod sesi: **Bersemuka di Klinik (Physical)** atau **Dalam Talian (Online Tele-therapy)**.
+  - Kalendar interaktif untuk pemilihan slot masa pakar (mengambil kira cuti dan hari bekerja pakar).
+  - Muat naik resit bayaran deposit terus ke sistem dengan kod tempahan unik (`SKM-XXXXXX`).
+  - Butang segera tambah acara ke **Google Calendar** atau muat turun fail kalendar `.ics`.
+- **Ujian Saringan Minda (DASS-21 Self-Assessment):**
+  - 21 soalan saringan emosi (Depression, Anxiety, Stress).
+  - Pengiraan skor automatik mengikut skala keterukan piawai (*Normal, Ringan, Sederhana, Teruk, Sangat Teruk*).
+  - Penghantaran salinan keputusan terus ke WhatsApp/emel klien dan rekod staf.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 2. Portal Pentadbiran Staf (Admin Portal)
+- **Papan Pemuka (Dashboard):** Ringkasan statistik tempahan, tindakan segera, pintasan pantas, dan status saringan terkini.
+- **Pengurusan Tempahan Temu Janji:**
+  - Senarai penuh tempahan pesakit dengan penapis status (*Perlu Tindakan, Disahkan, Selesai, Batal*).
+  - Semakan slip deposit, pengesahan slot masa, penjanaan pautan Google Meet, dan notifikasi WhatsApp terus kepada pesakit.
+- **Penyelarasan Google Calendar (Google Calendar Sync):**
+  - Integrasi membaca acara dari Google Calendar klinik melalui pautan *Secret address in iCal format*.
+  - Butang **"Segerak Sekarang (Sync Now)"** untuk penyelarasan manual.
+  - **Auto-Sync Setiap 1 Jam** melalui Laravel Task Scheduler.
+  - Penapis carian teks, penapis tarikh tunggal (*Single Date*), dan julat tarikh (*Date Range*).
+  - Pembersihan automatik kod panggilan Google Meet antarabangsa (*boilerplate cleaner*) bagi memastikan catatan klinikal kekal kemas.
+  - Halaman perincian penuh bagi setiap temujanji Google Calendar.
+- **Pengurusan Pakar & Terapis (Practitioners):**
+  - Maklumat tauliah, biografi, mod sesi, penetapan hari bekerja/cuti mingguan, dan tarikh sekatan cuti tahunan (*blocked dates*).
+- **Katalog Perkhidmatan (Services):** Tambah, kemaskini, dan kawal harga pakej terapi serta kadar deposit.
+- **Artikel & Blog Psikoedukasi:** Sistem penerbitan artikel kesihatan mental dengan sokongan imej sampul dan tag topik.
+- **Respons Saringan DASS-21:** Rekod pesakit yang menjalani ujian saringan dengan carian dan filter tahap keterukan.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🛠️ Keperluan Sistem & Teknologi
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **PHP:** 8.4+
+- **Composer:** 2.x
+- **Node.js:** 20+ & npm
+- **Pangkalan Data:** SQLite (pembangunan tempatan) / MySQL / PostgreSQL
+- **Rangka Kerja:** Laravel 13.x
+- **Penggayaan UI:** Tailwind CSS v4 & Alpine.js
+- **Aset Fon:** Plus Jakarta Sans (Hos Tempatan melalui `@fontsource/plus-jakarta-sans`)
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+---
 
-## Agentic Development
+## 🚀 Panduan Pemasangan Tempatan (Local Setup)
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
+### 1. Klon Repositori & Pasang Ketergantungan
 ```bash
-composer require laravel/boost --dev
+git clone <URL_REPOSITORI>
+cd clinic-website
 
-php artisan boost:install
+# Pasang ketergantungan PHP
+composer install
+
+# Pasang ketergantungan JavaScript/CSS
+npm install
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Konfigurasi Persekitaran (`.env`)
+Salin fail konfigurasi sampel:
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-## Contributing
+Tetapkan konfigurasi pangkalan data dan pembolehubah penting dalam `.env`:
+```env
+APP_NAME="Sakeenah Medicare"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8000
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+DB_CONNECTION=sqlite
 
-## Code of Conduct
+# Integrasi Google Calendar (Pilihan tetapi disyorkan)
+# Dapatkan di: Google Calendar -> Settings -> Integrate Calendar -> Secret address in iCal format
+GOOGLE_CALENDAR_ICAL_URL="https://calendar.google.com/calendar/ical/your_calendar_id/private-token/basic.ics"
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 3. Migrasi Pangkalan Data & Seeder
+```bash
+# Jalankan migrasi dan isi data awal (staf pentadbir, pakar, pakej rawatan, dan artikel)
+php artisan migrate --seed
+```
 
-## Security Vulnerabilities
+> **Akaun Staf Pentadbir Lalai:**
+> - **Emel:** `admin@sakeenahmedicare.com`
+> - **Kata Laluan:** `password`
+> - **Pautan Log Masuk:** `http://localhost:8000/admin/login`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 4. Kompilasi Aset Frontend
+```bash
+# Pembangunan
+npm run dev
 
-## License
+# Atau binaan produksi
+npm run build
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 5. Menjalankan Aplikasi
+```bash
+php artisan serve
+```
+Laman web kini boleh diakses di `http://localhost:8000`.
+
+---
+
+## ⏰ Penjadualan Auto-Sync Google Calendar
+
+Untuk membolehkan fungsi auto-sync Google Calendar berjalan setiap 1 jam, pastikan Laravel Scheduler aktif di server anda:
+
+**Secara Tempatan (Local Testing):**
+```bash
+# Uji arahan sync sekali
+php artisan google-calendar:sync
+
+# Atau jalankan scheduler worker secara berterusan
+php artisan schedule:work
+```
+
+**Di Persekitaran Server / Pengeluaran (Production Crontab):**
+```bash
+* * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
+```
+
+---
+
+## 🧪 Pengujian & Piawaian Kod
+
+Projek ini dilengkapi dengan set ujian automatik yang komprehensif (PHPUnit):
+
+```bash
+# Menjalankan keseluruhan ujian suite
+php artisan test --compact
+
+# Memeriksa dan membetulkan format kod mengikut piawaian Laravel Pint
+vendor/bin/pint --format agent
+```
+
+---
+
+## 📄 Lesen & Hak Cipta
+
+Hak Cipta Terpelihara © 2026 **Sakeenah Medicare**.
+Pembangunan sistem berasaskan kerangka kerja Laravel di bawah lesen MIT.
