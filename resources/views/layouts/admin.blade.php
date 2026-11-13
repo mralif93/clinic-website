@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>@yield('title', 'Portal Pentadbiran | Sakeenah Medicare')</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-neutral-100 text-neutral-800 font-sans antialiased flex min-h-screen" x-data="{ mobileMenuOpen: false }">
@@ -73,6 +69,11 @@
                         {{ $pendingCount }}
                     </span>
                 @endif
+            </a>
+
+            <a href="{{ route('admin.google-calendar.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold {{ request()->routeIs('admin.google-calendar.*') ? 'bg-[#2D6A4F] text-white shadow-xs' : 'hover:bg-neutral-800 text-neutral-400 hover:text-white' }} transition">
+                <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                <span>Google Calendar</span>
             </a>
 
             <a href="{{ route('admin.services.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold {{ request()->routeIs('admin.services.*') ? 'bg-[#2D6A4F] text-white shadow-xs' : 'hover:bg-neutral-800 text-neutral-400 hover:text-white' }} transition">

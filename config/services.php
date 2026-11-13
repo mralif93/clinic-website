@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'google_calendar' => [
+        'ical_url' => env('GOOGLE_CALENDAR_ICAL_URL'),
+    ],
+
 ];

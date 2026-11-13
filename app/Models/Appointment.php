@@ -28,6 +28,7 @@ class Appointment extends Model
         'payment_status',
         'payment_method',
         'payment_reference',
+        'deposit_receipt',
         'meeting_url',
         'admin_notes',
     ];

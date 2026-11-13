@@ -7,6 +7,7 @@ use App\Models\Article;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class AdminArticleController extends Controller
@@ -14,18 +15,37 @@ class AdminArticleController extends Controller
     public function index(Request $request): View
     {
         $search = $request->query('q');
+        $category = $request->query('category');
+        $status = $request->query('status'); // published, draft
+
         $query = Article::query();
 
         if ($search) {
-            $query->where('title', 'like', "%{$search}%")
-                ->orWhere('author_name', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search): void {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('author_name', 'like', "%{$search}%")
+                    ->orWhere('summary', 'like', "%{$search}%");
+            });
+        }
+
+        if ($category) {
+            $query->where('category', $category);
+        }
+
+        if ($status !== null && $status !== '') {
+            $query->where('is_published', $status === 'published');
         }
 
         $articles = $query->latest('created_at')->paginate(12)->withQueryString();
 
+        $categories = Article::distinct()->pluck('category')->filter()->values();
+
         return view('admin.articles.index', [
             'articles' => $articles,
             'search' => $search,
+            'selectedCategory' => $category,
+            'selectedStatus' => $status,
+            'categories' => $categories,
         ]);
     }
 
@@ -45,27 +65,28 @@ class AdminArticleController extends Controller
             'author_name' => ['required', 'string', 'max:255'],
             'summary' => ['nullable', 'string', 'max:500'],
             'content' => ['required', 'string'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'image_path' => ['nullable', 'string', 'max:255'],
             'read_time_minutes' => ['required', 'integer', 'min:1'],
             'tags' => ['nullable', 'string'],
-            'is_featured' => ['boolean'],
             'is_published' => ['boolean'],
+            'is_featured' => ['boolean'],
         ]);
 
-        $validated['slug'] = Str::slug($validated['title']).'-'.Str::random(4);
-        $validated['is_featured'] = $request->boolean('is_featured');
-        $validated['is_published'] = $request->boolean('is_published');
-        $validated['published_at'] = $validated['is_published'] ? now() : null;
-
-        if (! empty($validated['tags'])) {
-            $validated['tags'] = array_map('trim', explode(',', $validated['tags']));
-        } else {
-            $validated['tags'] = [];
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('articles', 'public');
+            $validated['image_path'] = 'storage/'.$path;
         }
+
+        $validated['slug'] = Str::slug($validated['title']).'-'.Str::random(4);
+        $validated['tags'] = array_filter(array_map('trim', explode(',', $request->input('tags', ''))));
+        $validated['is_published'] = $request->boolean('is_published');
+        $validated['is_featured'] = $request->boolean('is_featured');
+        $validated['published_at'] = $validated['is_published'] ? now() : null;
 
         Article::create($validated);
 
-        return redirect()->route('admin.articles.index')->with('success', 'Artikel / Post baharu berjaya diterbitkan.');
+        return redirect()->route('admin.articles.index')->with('success', 'Artikel baharu berjaya diterbitkan.');
     }
 
     public function edit(int $id): View
@@ -88,29 +109,36 @@ class AdminArticleController extends Controller
             'author_name' => ['required', 'string', 'max:255'],
             'summary' => ['nullable', 'string', 'max:500'],
             'content' => ['required', 'string'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'image_path' => ['nullable', 'string', 'max:255'],
             'read_time_minutes' => ['required', 'integer', 'min:1'],
             'tags' => ['nullable', 'string'],
-            'is_featured' => ['boolean'],
             'is_published' => ['boolean'],
+            'is_featured' => ['boolean'],
         ]);
 
-        $validated['is_featured'] = $request->boolean('is_featured');
+        if ($request->hasFile('image')) {
+            if ($article->image_path && Str::startsWith($article->image_path, 'storage/')) {
+                $rawPath = Str::after($article->image_path, 'storage/');
+                if (Storage::disk('public')->exists($rawPath)) {
+                    Storage::disk('public')->delete($rawPath);
+                }
+            }
+            $path = $request->file('image')->store('articles', 'public');
+            $validated['image_path'] = 'storage/'.$path;
+        }
+
+        $validated['tags'] = array_filter(array_map('trim', explode(',', $request->input('tags', ''))));
         $validated['is_published'] = $request->boolean('is_published');
+        $validated['is_featured'] = $request->boolean('is_featured');
 
         if ($validated['is_published'] && ! $article->published_at) {
             $validated['published_at'] = now();
         }
 
-        if (! empty($validated['tags'])) {
-            $validated['tags'] = array_map('trim', explode(',', $validated['tags']));
-        } else {
-            $validated['tags'] = [];
-        }
-
         $article->update($validated);
 
-        return redirect()->route('admin.articles.index')->with('success', 'Artikel / Post berjaya dikemaskini.');
+        return redirect()->route('admin.articles.index')->with('success', 'Artikel berjaya dikemaskini.');
     }
 
     public function destroy(int $id): RedirectResponse

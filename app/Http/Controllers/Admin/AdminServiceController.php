@@ -7,16 +7,45 @@ use App\Models\Service;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class AdminServiceController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $services = Service::orderBy('sort_order')->paginate(15);
+        $search = $request->query('q');
+        $category = $request->query('category');
+        $status = $request->query('status'); // active, inactive
+
+        $query = Service::query();
+
+        if ($search) {
+            $query->where(function ($q) use ($search): void {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('summary', 'like', "%{$search}%")
+                    ->orWhere('target_audience', 'like', "%{$search}%");
+            });
+        }
+
+        if ($category) {
+            $query->where('category', $category);
+        }
+
+        if ($status !== null && $status !== '') {
+            $query->where('is_active', $status === 'active');
+        }
+
+        $services = $query->orderBy('sort_order')->paginate(15)->withQueryString();
+
+        $categories = Service::distinct()->pluck('category')->filter()->values();
 
         return view('admin.services.index', [
             'services' => $services,
+            'search' => $search,
+            'selectedCategory' => $category,
+            'selectedStatus' => $status,
+            'categories' => $categories,
         ]);
     }
 
@@ -45,6 +74,7 @@ class AdminServiceController extends Controller
             'allows_in_person' => ['boolean'],
             'is_featured' => ['boolean'],
             'is_active' => ['boolean'],
+            'sort_order' => ['nullable', 'integer'],
         ]);
 
         if ($request->hasFile('image')) {
@@ -57,10 +87,11 @@ class AdminServiceController extends Controller
         $validated['allows_in_person'] = $request->boolean('allows_in_person');
         $validated['is_featured'] = $request->boolean('is_featured');
         $validated['is_active'] = $request->boolean('is_active');
+        $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);
 
         Service::create($validated);
 
-        return redirect()->route('admin.services.index')->with('success', 'Perkhidmatan baharu berjaya ditambah.');
+        return redirect()->route('admin.services.index')->with('success', 'Perkhidmatan baharu berjaya didaftarkan.');
     }
 
     public function edit(int $id): View
@@ -92,9 +123,16 @@ class AdminServiceController extends Controller
             'allows_in_person' => ['boolean'],
             'is_featured' => ['boolean'],
             'is_active' => ['boolean'],
+            'sort_order' => ['nullable', 'integer'],
         ]);
 
         if ($request->hasFile('image')) {
+            if ($service->image_path && Str::startsWith($service->image_path, 'storage/')) {
+                $rawPath = Str::after($service->image_path, 'storage/');
+                if (Storage::disk('public')->exists($rawPath)) {
+                    Storage::disk('public')->delete($rawPath);
+                }
+            }
             $path = $request->file('image')->store('services', 'public');
             $validated['image_path'] = 'storage/'.$path;
         }
@@ -103,10 +141,11 @@ class AdminServiceController extends Controller
         $validated['allows_in_person'] = $request->boolean('allows_in_person');
         $validated['is_featured'] = $request->boolean('is_featured');
         $validated['is_active'] = $request->boolean('is_active');
+        $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);
 
         $service->update($validated);
 
-        return redirect()->route('admin.services.index')->with('success', 'Maklumat perkhidmatan berjaya dikemaskini.');
+        return redirect()->route('admin.services.index')->with('success', 'Perkhidmatan berjaya dikemaskini.');
     }
 
     public function destroy(int $id): RedirectResponse

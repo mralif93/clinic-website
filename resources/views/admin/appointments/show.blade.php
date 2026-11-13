@@ -67,6 +67,32 @@
                 </div>
             </div>
 
+            {{-- Bukti Resit Deposit --}}
+            <div class="pt-4 border-t border-neutral-100">
+                <span class="text-neutral-400 block text-xs mb-2">Bukti Pembayaran Deposit Klien:</span>
+                @if($appointment->deposit_receipt)
+                    <div class="p-4 rounded-2xl bg-neutral-50 border border-neutral-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-neutral-900">Fail Resit Telah Dimuat Naik</p>
+                                <p class="text-[11px] text-neutral-500">Klik untuk menyemak bukti transaksi pembayaran deposit</p>
+                            </div>
+                        </div>
+                        <a href="{{ Storage::url($appointment->deposit_receipt) }}" target="_blank" class="px-4 py-2 rounded-xl bg-[#2D6A4F] text-white text-xs font-bold hover:bg-[#24543F] shadow-xs transition">
+                            Buka / Muat Turun Resit &rarr;
+                        </a>
+                    </div>
+                @else
+                    <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-200/80 text-xs text-amber-800 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        <span>Klien belum memuat naik resit deposit melalui portal.</span>
+                    </div>
+                @endif
+            </div>
+
             <div class="pt-4 border-t border-neutral-100">
                 <span class="text-neutral-400 block text-xs mb-1">Catatan Isu / Sebab Temu Janji Klien:</span>
                 <div class="p-4 rounded-2xl bg-neutral-50 text-xs text-neutral-700 leading-relaxed border border-neutral-200/80">

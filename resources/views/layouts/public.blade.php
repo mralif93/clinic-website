@@ -6,10 +6,6 @@
     <meta name="description" content="@yield('meta_description', 'Sakeenah Medicare (SKMED) - Pusat Psikologi & Kesejahteraan Minda di Cyberjaya. Khidmat terapi klinikal, kaunseling, penilaian ADHD/Autisme dan sokongan emosi.')">
     <title>@yield('title', 'Sakeenah Medicare | Pusat Psikologi & Kesejahteraan Emosi Cyberjaya')</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
-
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-[#FBFBFB] text-neutral-800 font-sans antialiased selection:bg-[#52B788]/20 selection:text-[#2D6A4F] flex flex-col min-h-screen overflow-x-hidden">

@@ -3,16 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\AppointmentStatusUpdatedMail;
 use App\Models\Appointment;
+use App\Models\Practitioner;
+use App\Models\Service;
+use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class AdminAppointmentController extends Controller
 {
     public function index(Request $request): View
     {
         $status = $request->query('status');
+        $search = $request->query('q');
+        $serviceId = $request->query('service_id');
+        $practitionerId = $request->query('practitioner_id');
+        $mode = $request->query('mode');
 
         $query = Appointment::with(['service', 'practitioner'])->latest();
 
@@ -20,11 +30,41 @@ class AdminAppointmentController extends Controller
             $query->where('status', $status);
         }
 
+        if ($search) {
+            $query->where(function ($q) use ($search): void {
+                $q->where('booking_code', 'like', "%{$search}%")
+                    ->orWhere('client_name', 'like', "%{$search}%")
+                    ->orWhere('client_phone', 'like', "%{$search}%")
+                    ->orWhere('client_email', 'like', "%{$search}%");
+            });
+        }
+
+        if ($serviceId) {
+            $query->where('service_id', $serviceId);
+        }
+
+        if ($practitionerId) {
+            $query->where('practitioner_id', $practitionerId);
+        }
+
+        if ($mode && in_array($mode, ['in_person', 'online'])) {
+            $query->where('session_mode', $mode);
+        }
+
         $appointments = $query->paginate(15)->withQueryString();
+
+        $services = Service::orderBy('name')->get(['id', 'name']);
+        $practitioners = Practitioner::orderBy('name')->get(['id', 'name']);
 
         return view('admin.appointments.index', [
             'appointments' => $appointments,
             'currentStatus' => $status,
+            'search' => $search,
+            'serviceId' => $serviceId,
+            'practitionerId' => $practitionerId,
+            'mode' => $mode,
+            'services' => $services,
+            'practitioners' => $practitioners,
             'statusCounts' => [
                 'all' => Appointment::count(),
                 'pending' => Appointment::where('status', 'pending')->count(),
@@ -55,6 +95,8 @@ class AdminAppointmentController extends Controller
         ]);
 
         $appointment = Appointment::findOrFail($id);
+        $oldStatus = $appointment->status;
+
         $appointment->update([
             'status' => $request->input('status'),
             'payment_status' => $request->input('payment_status'),
@@ -62,6 +104,16 @@ class AdminAppointmentController extends Controller
             'meeting_url' => $request->input('meeting_url'),
         ]);
 
-        return back()->with('success', 'Status tempahan berjaya dikemaskini.');
+        // Send status update email if status changed
+        if ($oldStatus !== $appointment->status && ! empty($appointment->client_email)) {
+            try {
+                Mail::to($appointment->client_email)->send(new AppointmentStatusUpdatedMail($appointment));
+            } catch (Exception $e) {
+                Log::warning('Gagal menghantar emel kemas kini status: '.$e->getMessage());
+            }
+        }
+
+        return redirect()->route('admin.appointments.show', $appointment->id)
+            ->with('status', 'Status tempahan berjaya dikemaskini dan emel notifikasi telah dihantar!');
     }
 }

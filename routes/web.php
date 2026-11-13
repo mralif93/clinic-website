@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminAppointmentController;
 use App\Http\Controllers\Admin\AdminArticleController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminGoogleCalendarController;
 use App\Http\Controllers\Admin\AdminPractitionerController;
 use App\Http\Controllers\Admin\AdminScreenerController;
 use App\Http\Controllers\Admin\AdminServiceController;
@@ -44,8 +45,10 @@ Route::get('/ujian-saringan/keputusan/{id}', [ScreenerController::class, 'result
 
 // Enjin Tempahan Sesi
 Route::get('/tempah-sesi', [BookingController::class, 'index'])->name('booking.index');
+Route::get('/tempah-sesi/api/booked-slots', [BookingController::class, 'getBookedSlots'])->name('booking.booked-slots');
 Route::post('/tempah-sesi', [BookingController::class, 'store'])->name('booking.store');
 Route::get('/tempahan-berjaya/{booking_code}', [BookingController::class, 'confirmation'])->name('booking.confirmation');
+Route::post('/tempahan-berjaya/{booking_code}/muat-naik-resit', [BookingController::class, 'uploadReceipt'])->name('booking.upload-receipt');
 
 // ==========================================
 // PORTAL PENGURUSAN KLINIK (ADMIN PORTAL)
@@ -68,6 +71,11 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::get('/tempahan', [AdminAppointmentController::class, 'index'])->name('appointments.index');
         Route::get('/tempahan/{id}', [AdminAppointmentController::class, 'show'])->name('appointments.show');
         Route::patch('/tempahan/{id}/status', [AdminAppointmentController::class, 'updateStatus'])->name('appointments.update-status');
+
+        // Google Calendar Appointments Sync
+        Route::get('/google-calendar', [AdminGoogleCalendarController::class, 'index'])->name('google-calendar.index');
+        Route::get('/google-calendar/{id}', [AdminGoogleCalendarController::class, 'show'])->name('google-calendar.show');
+        Route::post('/google-calendar/sync', [AdminGoogleCalendarController::class, 'sync'])->name('google-calendar.sync');
 
         // Pengurusan Ujian Saringan
         Route::get('/ujian-saringan', [AdminScreenerController::class, 'index'])->name('screeners.index');
