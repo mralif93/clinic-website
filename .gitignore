@@ -5,13 +5,16 @@
 !.env.example
 .phpactor.json
 .phpunit.result.cache
+.phpunit.cache
 /.codex
 /.cursor/
 /.idea
 /.nova
-/.phpunit.cache
 /.vscode
 /.zed
+/.amp/
+/.claude/
+/.factory/
 /auth.json
 /node_modules
 /public/build
@@ -20,8 +23,28 @@
 /public/storage
 /storage/*.key
 /storage/pail
+/storage/framework/cache/data/*
+!storage/framework/cache/data/.gitignore
+/storage/framework/sessions/*
+!storage/framework/sessions/.gitignore
+/storage/framework/testing/*
+!storage/framework/testing/.gitignore
+/storage/framework/views/*
+!storage/framework/views/.gitignore
+/storage/logs/*
+!storage/logs/.gitignore
 /vendor
 _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Pangkalan Data Tempatan (Local SQLite)
+database/*.sqlite
+database/*.sqlite-journal
+database/*.sqlite-shm
+database/*.sqlite-wal
+
+# Fail Media Binari Berat / Arkib Yang Tidak Digunakan Dalam Kod
+public/media/logos/*.zip
+public/media/videos/*.mp4
