@@ -25,6 +25,7 @@ Route::get('/', HomeController::class)->name('home');
 // Tentang Kami & Hubungi
 Route::get('/tentang-kami', [PageController::class, 'about'])->name('about');
 Route::get('/hubungi-kami', [PageController::class, 'contact'])->name('contact');
+Route::get('/program-korporat-eap', [PageController::class, 'corporate'])->name('corporate');
 
 // Perkhidmatan
 Route::get('/perkhidmatan', [ServiceController::class, 'index'])->name('services.index');

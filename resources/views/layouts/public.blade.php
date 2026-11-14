@@ -47,6 +47,9 @@
                 <a href="{{ route('services.index') }}" class="transition hover:text-[#2D6A4F] whitespace-nowrap {{ request()->routeIs('services.*') ? 'text-[#2D6A4F] font-semibold' : '' }}">
                     Perkhidmatan
                 </a>
+                <a href="{{ route('corporate') }}" class="transition hover:text-[#2D6A4F] whitespace-nowrap {{ request()->routeIs('corporate') ? 'text-[#2D6A4F] font-semibold' : '' }}">
+                    Program Korporat (EAP)
+                </a>
                 <a href="{{ route('practitioners.index') }}" class="transition hover:text-[#2D6A4F] whitespace-nowrap {{ request()->routeIs('practitioners.*') ? 'text-[#2D6A4F] font-semibold' : '' }}">
                     Pakar Kami
                 </a>
@@ -95,6 +98,7 @@
             <a href="{{ route('home') }}" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-neutral-700 hover:bg-emerald-50 hover:text-[#2D6A4F] {{ request()->routeIs('home') ? 'bg-emerald-50 text-[#2D6A4F] font-semibold' : '' }}">Laman Utama</a>
             <a href="{{ route('about') }}" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-neutral-700 hover:bg-emerald-50 hover:text-[#2D6A4F] {{ request()->routeIs('about') ? 'bg-emerald-50 text-[#2D6A4F] font-semibold' : '' }}">Tentang Kami</a>
             <a href="{{ route('services.index') }}" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-neutral-700 hover:bg-emerald-50 hover:text-[#2D6A4F] {{ request()->routeIs('services.*') ? 'bg-emerald-50 text-[#2D6A4F] font-semibold' : '' }}">Perkhidmatan</a>
+            <a href="{{ route('corporate') }}" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-neutral-700 hover:bg-emerald-50 hover:text-[#2D6A4F] {{ request()->routeIs('corporate') ? 'bg-emerald-50 text-[#2D6A4F] font-semibold' : '' }}">Program Korporat & EAP</a>
             <a href="{{ route('practitioners.index') }}" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-neutral-700 hover:bg-emerald-50 hover:text-[#2D6A4F] {{ request()->routeIs('practitioners.*') ? 'bg-emerald-50 text-[#2D6A4F] font-semibold' : '' }}">Pakar Kami</a>
             <a href="{{ route('articles.index') }}" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-neutral-700 hover:bg-emerald-50 hover:text-[#2D6A4F] {{ request()->routeIs('articles.*') ? 'bg-emerald-50 text-[#2D6A4F] font-semibold' : '' }}">Artikel & Panduan</a>
             <a href="{{ route('screener.index') }}" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-neutral-700 hover:bg-emerald-50 hover:text-[#2D6A4F] {{ request()->routeIs('screener.*') ? 'bg-emerald-50 text-[#2D6A4F] font-semibold' : '' }}">Ujian Saringan Minda (DASS-21)</a>
@@ -146,7 +150,7 @@
                         <li><a href="{{ route('services.index') }}" class="hover:text-emerald-400 transition">Penilaian ADHD & Autisme</a></li>
                         <li><a href="{{ route('services.index') }}" class="hover:text-emerald-400 transition">Terapi Pasangan & Keluarga</a></li>
                         <li><a href="{{ route('services.index') }}" class="hover:text-emerald-400 transition">Terapi Pertuturan & Carakerja</a></li>
-                        <li><a href="{{ route('services.index') }}" class="hover:text-emerald-400 transition">Program Korporat (EAP)</a></li>
+                        <li><a href="{{ route('corporate') }}" class="hover:text-emerald-400 transition">Program Korporat (EAP)</a></li>
                     </ul>
                 </div>
 
