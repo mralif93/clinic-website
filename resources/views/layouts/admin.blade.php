@@ -146,7 +146,7 @@
 
         {{-- Content Container --}}
         <main class="flex-1 overflow-y-auto bg-neutral-50/50">
-            <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+            <div class="w-full p-4 sm:p-6 lg:p-8 space-y-6">
                 @if(session('success'))
                     <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2.5 shadow-2xs">
                         <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>

@@ -188,36 +188,45 @@ class GoogleCalendarSyncService
     }
 
     /**
-     * Parse iCal date or datetime string into Carbon instance.
+     * Parse iCal date or datetime string into Carbon instance in Malaysia local time (Asia/Kuala_Lumpur).
      *
      * @return array{datetime: Carbon, is_all_day: bool}
      */
     private function parseIcsDate(string $propPart, string $value): array
     {
         $value = trim($value);
+        $localTz = config('app.timezone', 'Asia/Kuala_Lumpur');
         $isAllDay = str_contains($propPart, 'VALUE=DATE') || strlen($value) === 8;
 
         if ($isAllDay && strlen($value) === 8) {
             // Format: YYYYMMDD
-            $dt = Carbon::createFromFormat('Ymd', $value, 'UTC')->startOfDay();
+            $dt = Carbon::createFromFormat('Ymd', $value, $localTz)->startOfDay();
 
             return ['datetime' => $dt, 'is_all_day' => true];
         }
 
-        // Check if value is UTC: ends with Z (e.g. 20261113T043000Z)
+        // Check if a specific TZID is provided in the property, e.g. DTSTART;TZID=Asia/Kuala_Lumpur
+        $tzid = null;
+        if (preg_match('/TZID=([^;:]+)/i', $propPart, $tzMatches)) {
+            $tzid = trim($tzMatches[1]);
+        }
+
+        // Format: UTC ends with Z (e.g. 20261113T043000Z)
         if (str_ends_with($value, 'Z')) {
-            $dt = Carbon::createFromFormat('Ymd\THis\Z', $value, 'UTC')->setTimezone(config('app.timezone', 'Asia/Kuala_Lumpur'));
+            $dt = Carbon::createFromFormat('Ymd\THis\Z', $value, 'UTC')->setTimezone($localTz);
 
             return ['datetime' => $dt, 'is_all_day' => false];
         }
 
-        // Format: YYYYMMDDTHHMMSS (local without Z)
+        // Format: YYYYMMDDTHHMMSS with TZID or local timezone
+        $sourceTz = $tzid ?: $localTz;
+
         try {
-            $dt = Carbon::createFromFormat('Ymd\THis', $value, config('app.timezone', 'Asia/Kuala_Lumpur'));
+            $dt = Carbon::createFromFormat('Ymd\THis', $value, $sourceTz)->setTimezone($localTz);
 
             return ['datetime' => $dt, 'is_all_day' => false];
         } catch (\Throwable) {
-            return ['datetime' => Carbon::parse($value), 'is_all_day' => false];
+            return ['datetime' => Carbon::parse($value, $sourceTz)->setTimezone($localTz), 'is_all_day' => false];
         }
     }
 }
